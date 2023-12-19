@@ -16,15 +16,17 @@ def lfsr(polynomial, binary):
     output = open("output"+polynomial+".txt", "w")
     # 清空文件内容
     output.truncate()
-    num = 0
 
     output.write(''.join(register))
     output.write(" / \n")
 
+    output_str = list()
 
     while True:
         # 计算异或值
         next_bit = sum(int(register[i]) * int(polynomial[i]) for i in range(register_length)) % 2
+
+        output_str.append(next_bit)
 
         # 左移一位
         register.pop(0)
@@ -37,12 +39,11 @@ def lfsr(polynomial, binary):
         
         output.write(temp)
         output.write(" / \n")
-        num += 1
 
         if temp == bin:
             break
     
-    return num
+    return ''.join(str(i) for i in output_str)
 #判断polynomial是否是本源多项式
 def is_primitive(polynomial):
     polynomial += "1"
@@ -70,4 +71,5 @@ if __name__ == '__main__':
     else:
         print("输入不是本源多项式")
     output = lfsr(polynomial, binary)
-    print("序列周期是:",output)
+    print("输出序列为:",output)
+    print("序列周期是:",len(output))
